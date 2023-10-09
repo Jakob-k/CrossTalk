@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>936062440164-vf3rba4bkkmgjtr9kn82lk5p0jnccgqk.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.936062440164-vf3rba4bkkmgjtr9kn82lk5p0jnccgqk</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>936062440164-1725d791rhc0ncm5tbe0dj21go37qc7q.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCuB5FN2uW9gNkdnJlZGvnvB0LUmlbeUR0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>936062440164</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.crosstalk</string>
+	<key>PROJECT_ID</key>
+	<string>crosstalk-f61b3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>crosstalk-f61b3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:936062440164:ios:047503737bca16ec37d2f1</string>
+	<key>DATABASE_URL</key>
+	<string>https://crosstalk-f61b3-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
