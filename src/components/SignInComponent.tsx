@@ -25,7 +25,6 @@ export function SignInComponent({ navigation, route }: Props) {
             <Button title='Google' onPress={() => onGoogleButtonPress().then((credentials) => signIn(credentials))} />
             <Text>Or</Text>
             <Button title='Facebook' onPress={() => onFacebookButtonPress().then((credentials) => signIn(credentials))} />
-            <Button title='Test Sign In' onPress={(() => signIn('test'))} />
         </View>
     )
 }

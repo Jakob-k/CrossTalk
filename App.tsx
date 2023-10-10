@@ -71,12 +71,16 @@ function App(): JSX.Element {
           isLoading: false
         }
       case 'SIGN_IN':
+        console.log('Inside sign in case\nData is: ', action, '\PrevState is: ', prevState)
+        setUserToken(action.token)
         return {
           ...prevState,
           isSignout: false,
           userToken: action.token
         }
       case 'SIGN_OUT':
+        console.log('Sign out case\nData is: ', action, '\PrevState is: ', prevState)
+        setUserToken(null)
         return {
           ...prevState,
           isSignout: true,
@@ -140,7 +144,7 @@ function App(): JSX.Element {
       <NavigationContainer>
         <Stack.Navigator>
           {userToken == null ? (
-            <Stack.Screen name='SignIn' component={SignInComponent} options={{ title: 'Sign in' }} />
+            <Stack.Screen name='SignIn' component={SignInComponent} options={{ title: 'Sign in', animationTypeForReplace: state.isSignout ? 'pop' : 'push', }} />
           ) : (
             <Stack.Screen name='Home' component={HomeComponent} />
           )}
