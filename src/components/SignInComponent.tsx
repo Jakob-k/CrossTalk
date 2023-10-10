@@ -1,4 +1,4 @@
-import { Text, View, Button } from 'react-native'
+import { Text, View, Button, SafeAreaView } from 'react-native'
 import * as React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamsList } from '../types/types'
@@ -19,13 +19,13 @@ export function SignInComponent({ navigation, route }: Props) {
     const { signIn } = useContext(AuthContext)
 
     return (
-        <View>
+        <SafeAreaView>
             <Text>Welcome to CrossTalk</Text>
             <Text>Please sign in using:</Text>
             <Button title='Google' onPress={() => onGoogleButtonPress().then((credentials) => signIn(credentials))} />
             <Text>Or</Text>
             <Button title='Facebook' onPress={() => onFacebookButtonPress().then((credentials) => signIn(credentials))} />
-        </View>
+        </SafeAreaView>
     )
 }
 

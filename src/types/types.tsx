@@ -30,3 +30,8 @@ export type Message = {
     content: string,
     user: User
 }
+
+export type Auth = {
+    signIn: Function,
+    signOut: Function
+}

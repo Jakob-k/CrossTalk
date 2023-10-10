@@ -22,7 +22,7 @@ import {
 import { SignInComponent } from './src/components/SignInComponent';
 import { HomeComponent } from './src/components/HomeComponent'
 import SplashScreen from './src/components/SplashScreen';
-import { RootStackParamsList, User } from './src/types/types';
+import { Auth, RootStackParamsList, User } from './src/types/types';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 
@@ -144,9 +144,9 @@ function App(): JSX.Element {
       <NavigationContainer>
         <Stack.Navigator>
           {userToken == null ? (
-            <Stack.Screen name='SignIn' component={SignInComponent} options={{ title: 'Sign in', animationTypeForReplace: state.isSignout ? 'pop' : 'push', }} />
+            <Stack.Screen name='SignIn' component={SignInComponent} options={{ title: 'Sign in', animationTypeForReplace: state.isSignout ? 'pop' : 'push', headerShown: false }} />
           ) : (
-            <Stack.Screen name='Home' component={HomeComponent} />
+            <Stack.Screen name='Home' component={HomeComponent} options={{ headerShown: false }} />
           )}
         </Stack.Navigator>
       </NavigationContainer>
