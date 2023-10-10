@@ -5,7 +5,9 @@
  * @format
  */
 
-import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useEffect, useState, createContext, useReducer, useMemo } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   Button,
@@ -17,16 +19,15 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { SignInComponent } from './src/components/SignInComponent';
+import { HomeComponent } from './src/components/HomeComponent'
+import SplashScreen from './src/components/SplashScreen';
+import { RootStackParamsList, User } from './src/types/types';
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-type SectionProps = PropsWithChildren<{
+
+/* type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
@@ -54,36 +55,98 @@ function Section({ children, title }: SectionProps): JSX.Element {
       </Text>
     </View>
   );
-}
+} */
+export const AuthContext = createContext({})
+const Stack = createNativeStackNavigator<RootStackParamsList>()
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const [userToken, setUserToken] = useState(null)
+  const [state, dispatch] = useReducer((prevState: any, action: any) => {
+    switch (action.type) {
+      case 'RESTORE_TOKEN':
+        return {
+          ...prevState,
+          userToken: action.token,
+          isLoading: false
+        }
+      case 'SIGN_IN':
+        return {
+          ...prevState,
+          isSignout: false,
+          userToken: action.token
+        }
+      case 'SIGN_OUT':
+        return {
+          ...prevState,
+          isSignout: true,
+          userToken: null
+        }
+    }
+  },
+    {
+      isLoading: true,
+      isSignout: false,
+      userToken: null
+    }
+  )
+
+  const getUserToken = async () => {
+    // testing purposes
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    try {
+      // custom logic
+      await sleep(2000);
+      const token = null;
+      setUserToken(token);
+    } finally {
+      //setIsLoading(false);
+    }
   };
 
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      let userToken
+      try {
+
+      } catch (error) {
+        console.log('Getting user token failed: ', error)
+      }
+
+      // validate token
+
+      // This will switch to the App screen or Auth screen and this loading
+      // screen will be unmounted and thrown away.
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken })
+    }
+    bootstrapAsync()
+    console.log("User Token: ", userToken)
+  }, [])
+
+  const authContext = useMemo(() => ({
+    signIn: async (data: FirebaseAuthTypes.UserCredential) => {
+      console.log('sign in data: ', data)
+      dispatch({ type: 'SIGN_IN', token: data.user.uid })
+    },
+    signOut: () => dispatch({ type: 'SIGN_OUT' })
+  }), [])
+
+  if (state.isLoading) {
+    return <SplashScreen />
+  }
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Text>Welcome to CrossTalk</Text>
-          <Text>Please sign in</Text>
-          <Button title='Google'></Button>
-          <Button title='Facebook'></Button>
-          <Text>or create new account</Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {userToken == null ? (
+            <Stack.Screen name='SignIn' component={SignInComponent} options={{ title: 'Sign in' }} />
+          ) : (
+            <Stack.Screen name='Home' component={HomeComponent} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
 
