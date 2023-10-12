@@ -1,3 +1,6 @@
+import { FirebaseAuthTypes } from "@react-native-firebase/auth"
+import { AccessToken } from "react-native-fbsdk-next"
+
 export type RootStackParamsList = {
     Home: {
         user: {
@@ -31,7 +34,7 @@ export type Message = {
     user: User
 }
 
-export type Auth = {
-    signIn: Function,
-    signOut: Function
+export type AuthContextType = {
+    signIn: (credentials: string) => void,
+    signOut: () => void
 }

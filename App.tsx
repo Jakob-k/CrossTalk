@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState, createContext, useReducer, useMemo } from 'react';
@@ -22,42 +15,13 @@ import {
 import { SignInComponent } from './src/components/SignInComponent';
 import { HomeComponent } from './src/components/HomeComponent'
 import SplashScreen from './src/components/SplashScreen';
-import { Auth, RootStackParamsList, User } from './src/types/types';
+import { AuthContextType, RootStackParamsList, User } from './src/types/types';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { AccessToken, LoginManager, Settings } from 'react-native-fbsdk-next';
 
-
-
-/* type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({ children, title }: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-} */
-export const AuthContext = createContext({})
+export const AuthContext = createContext<AuthContextType | null>(null)
 const Stack = createNativeStackNavigator<RootStackParamsList>()
+Settings.initializeSDK()
 
 function App(): JSX.Element {
 
@@ -80,6 +44,7 @@ function App(): JSX.Element {
         }
       case 'SIGN_OUT':
         console.log('Sign out case\nData is: ', action, '\PrevState is: ', prevState)
+        LoginManager.logOut()
         setUserToken(null)
         return {
           ...prevState,
@@ -127,10 +92,10 @@ function App(): JSX.Element {
     console.log("User Token: ", userToken)
   }, [])
 
-  const authContext = useMemo(() => ({
-    signIn: async (data: FirebaseAuthTypes.UserCredential) => {
-      console.log('sign in data: ', data)
-      dispatch({ type: 'SIGN_IN', token: data.user.uid })
+  const authContext: AuthContextType = useMemo(() => ({
+    signIn: async (token: string) => {
+      console.log('sign in data: ', token)
+      dispatch({ type: 'SIGN_IN', token: token })
     },
     signOut: () => dispatch({ type: 'SIGN_OUT' })
   }), [])
