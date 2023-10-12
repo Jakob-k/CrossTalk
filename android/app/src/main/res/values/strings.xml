@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">CrossTalk</string>
+    <string name="facebook_application_id">859419682047590</string>
+    <string name="fb_login_protocol_scheme">fb859419682047590</string>
+    <string name="facebook_client_token">64d391df74ffef56bcbea0dc375f35ce</string>
 </resources>
