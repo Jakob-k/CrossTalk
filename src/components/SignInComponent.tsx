@@ -7,6 +7,7 @@ import { AuthContext } from '../../App'
 import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin'
 import auth from '@react-native-firebase/auth'
 import { AccessToken, LoginManager, LoginButton, Profile } from 'react-native-fbsdk-next'
+import { styled } from 'nativewind'
 
 type Props = NativeStackScreenProps<RootStackParamsList, 'SignIn'>
 
@@ -19,33 +20,36 @@ export function SignInComponent({ navigation, route }: Props) {
     const { signIn } = useContext(AuthContext) as AuthContextType
 
     return (
-        <SafeAreaView>
-            <Text>Welcome to CrossTalk</Text>
-            <Text>Please sign in using:</Text>
-            {/* <Button title='Google' onPress={() => onGoogleButtonPress().then((credentials) => signIn(credentials))} /> */}
-            <GoogleSigninButton onPress={() => onGoogleButtonPress().then((credentials) => signIn(credentials))} />
-            <Text>Or</Text>
-            {/* <Button title='Facebook' onPress={() => onFacebookButtonPress().then((credentials) => signIn(credentials))} /> */}
-            <LoginButton permissions={['public_profile']} onLoginFinished={
-                (error, result) => {
-                    console.log("error: ", error, "\nResult: ", result)
-                    if (error) {
-                        console.log("login has error: " + result);
-                    } else if (result.isCancelled) {
-                        console.log("login is cancelled.");
-                    } else {
-                        console.log('Succes')
-                        AccessToken.getCurrentAccessToken().then(
-                            (data) => {
-                                console.log(data)
-                                if (data) {
-                                    signIn(data.accessToken)
-                                }
+        <SafeAreaView className="flex h-full">
+            <View className="flex-1 justify-center items-center">
+                <Text className='text-5xl font-bold text-center'>Welcome to CrossTalk</Text>
+                <Text className='text-2xl'>Chat anywhere</Text>
+                <Text className='text-2xl'>about anything</Text>
+            </View>
+            <View className="flex-1 justify-start items-center">
+                <View className='flex h-2/4 justify-evenly items-center'>
+                    <GoogleSigninButton onPress={() => onGoogleButtonPress().then((credentials) => signIn(credentials!))} />
+                    <LoginButton permissions={['public_profile']} onLoginFinished={
+                        (error, result) => {
+                            if (error) {
+                                console.log("login has error: " + result);
+                            } else if (result.isCancelled) {
+                                console.log("login is cancelled.");
+                            } else {
+                                console.log('Succes')
+                                AccessToken.getCurrentAccessToken().then(
+                                    (data) => {
+                                        console.log(data)
+                                        if (data) {
+                                            signIn(data.accessToken)
+                                        }
+                                    }
+                                )
                             }
-                        )
-                    }
-                }
-            } onLogoutFinished={() => console.log("logout.")} />
+                        }
+                    } onLogoutFinished={() => console.log("logout.")} />
+                </View>
+            </View>
         </SafeAreaView>
     )
 }
@@ -56,8 +60,8 @@ async function onGoogleButtonPress() {
     const result = await GoogleSignin.signIn().catch((error) => { throw error })
 
     const googleCrendential = auth.GoogleAuthProvider.credential(result.idToken)
-
-    return (await auth().signInWithCredential(googleCrendential)).user.getIdToken(true)
+    await auth().signInWithCredential(googleCrendential)
+    return result.idToken
 }
 
 async function onFacebookButtonPress() {
